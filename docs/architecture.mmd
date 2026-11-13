@@ -1,0 +1,14 @@
+
+flowchart TD
+    A["Lambda Test Event<br/>TransactionRequest"] --> B["AWS Lambda<br/>Java 25"]
+    B --> C["TransactionHandler"]
+    C --> D["TransactionValidator"]
+    D --> E["TransactionService"]
+    E --> F["DynamoDbTransactionRepository"]
+    F --> G[("Amazon DynamoDB<br/>transactions table")]
+
+    G -->|New transaction| H["ACCEPTED<br/>Transaction reference returned"]
+    G -->|Existing idempotency key| I["DUPLICATE<br/>Original transaction returned"]
+
+    B -.-> J["Amazon CloudWatch Logs"]
+    K["Lambda Execution Role<br/>Restricted DynamoDB permissions<br/>CloudWatch logging permissions"] -.-> B
